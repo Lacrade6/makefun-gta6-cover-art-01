@@ -1,55 +1,83 @@
-// Screenshot scenes for Vice Coast Cover Studio, driven by ?shot=<name>.
-// Each scene loads the demo photos, sets a fixed look, renders, and then
-// marks window.__shotReady so a headless browser can capture it.
-// Scenes: cover (exported wide cover, full window), portrait (exported
-// portrait cover), editor (the editor with a photo loaded), nine (the
-// editor on the 9-panel layout with the Neon Nights grade).
-import { defaultState, renderCover } from './cover.js';
+// Screenshot scenes, driven by ?shot=<name>.
+// Each scene loads the sample photos (done by main.js before this runs),
+// sets a fixed look, renders, then sets window.__shotReady = true so a
+// headless browser knows when to capture the page.
 
-const SAMPLES = ['./samples/boulevard.jpg', './samples/pier.jpg'];
+import { renderCover, dealPanels } from "./cover.js";
 
-export async function runShot(shot, api) {
-  for (const url of SAMPLES) {
-    try {
-      const img = await api.loadImage(url);
-      api.photos.push({ img, name: url.split('/').pop() });
-    } catch {
-      // A missing sample just means fewer demo photos.
-    }
-  }
-  const base = defaultState(api.photos.length);
-  base.title = 'VICE COAST';
-  base.subtitle = 'Neon nights · Summer 2026';
+function applyLook(state, look) {
+  Object.assign(state, look);
+  return state;
+}
 
-  if (shot === 'cover' || shot === 'portrait') {
-    const size = shot === 'portrait' ? { w: 1080, h: 1350 } : { w: 1920, h: 1080 };
-    base.layoutId = 'mosaic';
-    base.gradeId = 'vice-sunset';
-    base.titleId = 'bold-block';
-    api.setState(base);
-    document.body.classList.add('shot-cover');
-    const canvas = api.canvas;
-    canvas.width = size.w;
-    canvas.height = size.h;
-    canvas.style.width = '100vw';
-    canvas.style.height = '100vh';
-    canvas.style.objectFit = 'contain';
-    renderCover(canvas.getContext('2d'), size.w, size.h, {
-      ...base,
-      photos: api.photos.map((p) => p.img),
+function showExportedCover(state, photos, sizeId) {
+  document.body.classList.add("shot-cover");
+  const canvas = document.getElementById("preview");
+  const view = { ...state, sizeId, showGrade: true, showTitle: true };
+  renderCover(canvas, view, photos.map((p) => p.img));
+}
+
+export async function runShot(name, ctx) {
+  const { state, photos, renderPreview, setStatus } = ctx;
+  dealPanels(state, photos.length);
+
+  if (name === "cover") {
+    applyLook(state, {
+      layoutId: "mosaic",
+      gradeId: "vice-sunset",
+      titleStyleId: "bold-block",
+      title: "VICE COAST",
+      subtitle: "Neon nights · Summer 2026",
     });
-  } else if (shot === 'nine') {
-    base.layoutId = 'grid-9';
-    base.gradeId = 'neon-nights';
-    base.titleId = 'halftone';
-    api.setState(base);
-    api.loadEditor();
+    showExportedCover(state, photos, "wide");
+  } else if (name === "portrait") {
+    applyLook(state, {
+      layoutId: "mosaic",
+      gradeId: "vice-sunset",
+      titleStyleId: "bold-block",
+      title: "VICE COAST",
+      subtitle: "Neon nights · Summer 2026",
+    });
+    showExportedCover(state, photos, "portrait");
+  } else if (name === "nine") {
+    applyLook(state, {
+      layoutId: "grid-3x3",
+      gradeId: "neon-nights",
+      titleStyleId: "halftone",
+      title: "VICE COAST",
+      subtitle: "Neon nights · Summer 2026",
+      sizeId: "square",
+    });
+    syncPickers(state);
+    renderPreview();
+    setStatus("Grid 3×3 with Neon Nights and Halftone lettering.");
   } else {
-    base.layoutId = 'hero-left';
-    base.gradeId = 'vice-sunset';
-    base.titleId = 'bold-block';
-    api.setState(base);
-    api.loadEditor();
+    // Default editor scene: Hero Left + Vice Sunset.
+    applyLook(state, {
+      layoutId: "hero-left",
+      gradeId: "vice-sunset",
+      titleStyleId: "bold-block",
+      title: "VICE COAST",
+      subtitle: "Neon nights · Summer 2026",
+      sizeId: "square",
+    });
+    syncPickers(state);
+    renderPreview();
+    setStatus("Sample photos loaded — drop your own photos to make it yours.");
   }
+
   window.__shotReady = true;
+}
+
+// Keep the picker buttons' active outlines in step with the scene's look.
+function syncPickers(state) {
+  const sync = (id, activeId) => {
+    document.querySelectorAll(`#${id} button`).forEach((b) => {
+      b.classList.toggle("active", b.dataset.id === activeId);
+    });
+  };
+  sync("layout-grid", state.layoutId);
+  sync("grade-list", state.gradeId);
+  sync("title-styles", state.titleStyleId);
+  sync("size-row", state.sizeId);
 }

@@ -4,16 +4,26 @@
 [![rank](https://make.fun/badge/gta6-cover-art-01/Lacrade6/makefun-gta6-cover-art-01/rank.svg)](https://make.fun/bounty/gta6-cover-art-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
 [![reward](https://make.fun/badge/gta6-cover-art-01/Lacrade6/makefun-gta6-cover-art-01/reward.svg)](https://make.fun/bounty/gta6-cover-art-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
 
-Vice Coast Cover Studio turns any photo into GTA-style poster cover art: a multi-panel cover with bold caption lettering and a Vice City sunset or neon colour grade, exported as a PNG to share. Built by an AI agent for make.fun's “Make GTA 6 Cover Art” bounty, $250 in USDC.
+Vice Coast Cover Studio is a static, offline web app that turns your own
+photos into GTA-style multi-panel poster cover art: pick a layout, drop in
+photos, add a bold caption, choose a Vice City sunset or neon colour grade,
+and export a PNG in the common post sizes. Everything is original — no game
+artwork, logos or fonts — and your photos are read on your machine only,
+never uploaded.
 
 ## What it does
 
-- **12 layouts** — Hero Left, Grid 2×2, Hero Top, Full Bleed, Trio, Hero Right, Grid 2×3, Grid 3×3, Film Strips, Hero Center, Duo Split and Mosaic, each adapting to square, portrait and wide covers.
-- **8 colour grades** — Vice Sunset, Neon Nights, Palm Heat, Coral Dusk, Midnight Drive, Bubblegum, Gold Coast and Poster Ink, each a gradient-map overlay with grain and vignette.
-- **3 title styles** — Bold Block, Neon Script and Halftone lettering, all drawn by hand on canvas (no Rockstar artwork, logos or fonts).
-- **Any photo** — drop in one or several photos, click a panel to select it, drag to crop, scroll to zoom, and assign a different photo to each panel.
-- **Fast** — one click exports all three post sizes at once: 1080 × 1080, 1080 × 1350 and 1920 × 1080 PNGs.
-- **Offline** — static files only; photos never leave the machine.
+- 12 multi-panel layouts (hero, grids, film strips, mosaic and more) that
+  adapt to square, portrait and wide covers
+- 8 colour grades, from Vice Sunset and Neon Nights to Poster Ink, with
+  film grain and a vignette
+- 3 title lettering styles — Bold Block, Neon Script and Halftone — drawn
+  on canvas with system font stacks
+- Any photo: fill every panel from one photo or many, with per-panel zoom
+  and drag-to-pan positioning
+- Fast export: one click for a PNG, or all three sizes (1080×1080,
+  1080×1350, 1920×1080) at once
+- Fully offline: static files, no network requests, no build step
 
 ## Run it
 
@@ -21,7 +31,9 @@ Vice Coast Cover Studio turns any photo into GTA-style poster cover art: a multi
 node serve.ts
 ```
 
-Then open http://localhost:8080 — two demo photos are pre-loaded so the first cover is ready immediately.
+Then open http://localhost:8080 in a desktop browser. Two sample photos
+load automatically so a finished-looking cover is on screen right away;
+drop your own photos onto the editor to make it yours.
 
 ---
 

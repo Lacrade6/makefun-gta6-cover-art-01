@@ -1,85 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vice Coast Cover Studio — GTA-style cover art maker</title>
-<link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:,">
 </head>
 <body>
 <header class="topbar">
   <div class="brand">
-    <span class="brand-mark">VC</span>
-    <div>
+    <div class="brand-mark" aria-hidden="true">VC</div>
+    <div class="brand-text">
       <h1>Vice Coast Cover Studio</h1>
-      <p>Turn any photo into a GTA-style poster cover, offline in your browser.</p>
+      <p>Turn your photos into multi-panel poster cover art</p>
     </div>
   </div>
   <div class="top-actions">
-    <button id="randomize" type="button" class="btn ghost">🎲 Random look</button>
-    <button id="before-after" type="button" class="btn ghost">Hold for before</button>
-    <button id="export-one" type="button" class="btn">Export PNG</button>
-    <button id="export-all" type="button" class="btn primary">Export all 3 sizes</button>
+    <button id="btn-random" type="button">🎲 Random look</button>
+    <button id="btn-before" type="button">Hold for before</button>
+    <button id="btn-export" type="button">Export PNG</button>
+    <button id="btn-export-all" type="button" class="primary">Export all 3 sizes</button>
   </div>
 </header>
 
-<main class="app">
+<main class="layout">
   <section class="preview-pane">
     <div class="canvas-wrap">
-      <canvas id="cover" width="1080" height="1080" aria-label="The cover preview"></canvas>
+      <canvas id="preview" width="1080" height="1080"></canvas>
     </div>
-    <p class="hint">Click a panel to select it · drag its photo to crop · scroll to zoom · click a photo below to put it in the selected panel.</p>
-    <div id="filmstrip" class="filmstrip" aria-label="Your photos"></div>
-    <p id="status" role="status"></p>
+    <p class="hint">Click a panel to select it · drag to pan · scroll to zoom</p>
+    <div id="filmstrip" class="filmstrip" aria-label="Loaded photos"></div>
+    <p id="status" class="status" role="status">Loading sample photos…</p>
   </section>
 
   <aside class="controls">
-    <div id="dropzone" class="dropzone" role="button" tabindex="0">
-      <strong>Drop photos here</strong> or click to choose from your machine.
-      <input id="photo" type="file" accept="image/*" multiple hidden>
-    </div>
+    <section class="card">
+      <div id="dropzone" class="dropzone" tabindex="0">
+        <strong>Drop photos here or click to choose</strong>
+        <span>Photos stay on your machine — nothing is uploaded.</span>
+      </div>
+      <input id="file-input" type="file" accept="image/*" multiple hidden>
+    </section>
 
-    <section class="group">
+    <section class="card">
       <h2>Caption</h2>
-      <label>Title
-        <input id="caption" type="text" maxlength="48" value="VICE COAST">
+      <label class="field">
+        <span>Title</span>
+        <input id="title-input" type="text" maxlength="48" value="VICE COAST">
       </label>
-      <label>Subtitle
-        <input id="subtitle" type="text" maxlength="64" value="Neon nights · Summer 2026">
+      <label class="field">
+        <span>Subtitle</span>
+        <input id="subtitle-input" type="text" maxlength="64" value="Neon nights · Summer 2026">
       </label>
-      <div id="titles" class="btn-row" aria-label="Title style"></div>
+      <div id="title-styles" class="button-row" role="group" aria-label="Title lettering style"></div>
     </section>
 
-    <section class="group">
-      <h2>Layout — 12 ways to frame it</h2>
-      <div id="layouts" class="layout-grid"></div>
+    <section class="card">
+      <h2>Layout</h2>
+      <div id="layout-grid" class="layout-grid"></div>
     </section>
 
-    <section class="group">
-      <h2>Colour grade — 8 sunset &amp; neon looks</h2>
-      <div id="grades" class="grade-list"></div>
+    <section class="card">
+      <h2>Colour grade</h2>
+      <div id="grade-list" class="grade-list"></div>
     </section>
 
-    <section class="group">
+    <section class="card">
       <h2>Selected panel</h2>
       <p id="panel-label" class="panel-label">Panel 1 of 4</p>
-      <label>Zoom <span id="zoom-val">108%</span>
-        <input id="zoom" type="range" min="100" max="300" value="108">
+      <label class="field slider-field">
+        <span>Zoom <output id="zoom-out">108%</output></span>
+        <input id="zoom-slider" type="range" min="100" max="300" step="1" value="108">
       </label>
-      <div class="btn-row">
-        <button id="center-photo" type="button" class="btn ghost">Center photo</button>
-        <button id="next-photo" type="button" class="btn ghost">Next photo</button>
+      <div class="button-row">
+        <button id="btn-center" type="button">Center photo</button>
+        <button id="btn-next-photo" type="button">Next photo</button>
       </div>
     </section>
 
-    <section class="group">
+    <section class="card">
       <h2>Export size</h2>
-      <div id="sizes" class="btn-row" aria-label="Export size"></div>
-      <p class="note">Exports are PNGs at 1080 × 1080, 1080 × 1350 and 1920 × 1080. Your photos never leave this machine.</p>
+      <div id="size-row" class="button-row" role="group" aria-label="Export size"></div>
+      <p class="note">Exports are PNGs at 1080×1080, 1080×1350 and 1920×1080.
+      Your photos never leave this machine.</p>
     </section>
   </aside>
 </main>
 
-<script type="module" src="./src/main.js"></script>
+<script type="module" src="src/main.js"></script>
 </body>
 </html>
